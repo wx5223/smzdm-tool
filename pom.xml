@@ -1,9 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>parent</artifactId>
-        <groupId>com.linkage.edu.microservice</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.2.6.RELEASE</version>
+        <relativePath />
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -66,20 +67,7 @@
         </dependency>
 
     </dependencies>
-    <repositories>
-        <repository>
-            <id>nexus</id>
-            <name>Team Nexus Repository</name>
-            <url>http://112.33.8.107:9102/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>nexus</id>
-            <name>Team Nexus Repository</name>
-            <url>http://112.33.8.107:9102/nexus/content/groups/public</url>
-        </pluginRepository>
-    </pluginRepositories>
+
     <build>
         <plugins>
             <plugin>
@@ -125,7 +113,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <imageName>linkage/${project.artifactId}</imageName>
+                    <imageName>shawn/${project.artifactId}</imageName>
                     <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
@@ -137,25 +125,6 @@
                 </configuration>
             </plugin>-->
 
-            <!--<plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.12</version>
-                <configuration>
-                    &lt;!&ndash; 注意imageName一定要是符合正则[a-z0-9-_.]的，否则构建不会成功 &ndash;&gt;
-                    &lt;!&ndash; 详见：https://github.com/spotify/docker-maven-plugin    Invalid repository name ... only [a-z0-9-_.] are allowed&ndash;&gt;
-                    <imageName>microservice-empty-client</imageName>
-                    &lt;!&ndash; 指定Dockerfile所在的路径 &ndash;&gt;
-                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
-                        </resource>
-                    </resources>
-                </configuration>
-            </plugin>-->
         </plugins>
     </build>
 </project>

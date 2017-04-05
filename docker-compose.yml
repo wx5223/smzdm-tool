@@ -1,8 +1,8 @@
 empty-client:
-  image: linkage/empty-client
+  image: shawn/smzdm-tool
   ports:
     - 9003:9003
-  command: --spring.cloud.config.uri=http://112.33.8.105:9101 --spring.profiles.active=development
+  #command: --spring.cloud.config.uri=http://112.33.8.105:9101 --spring.profiles.active=development
   environment:
     - SERVER_PORT=9003
     - ENV_PARAMS="test_params"
