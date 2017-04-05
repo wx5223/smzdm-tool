@@ -10,7 +10,7 @@
 
     <artifactId>smzdm-tool</artifactId>
     <packaging>jar</packaging>
- 
+    <version>1.0.0</version>
     <name>smzdm-tool</name>
     <url>http://maven.apache.org</url>
 
