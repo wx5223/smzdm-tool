@@ -5,6 +5,7 @@ import com.shawn.microservice.util.HttpClientUtil;
 import com.shawn.microservice.util.JsonUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -14,19 +15,27 @@ import java.util.regex.Pattern;
  * Created by Shawn on 2017/3/9.
  */
 public class SmzdmHandler {
+    public static int dayOfMonthForToday = -1;
     public static Long lastExecuteTime;
+    public static List<Article> articleHotListAll = new ArrayList<Article>();
     public static List<Article> article9kuai9listAll = new ArrayList<Article>();
     public static List<Article> articlejingxuanlistAll = new ArrayList<Article>();
 
     public static List<Article> getArticle(String name) {
-        if (name.contains("9kuai9")) {
+        return articleHotListAll;
+        /*if (name.contains("9kuai9")) {
             return article9kuai9listAll;
         } else {
             return articlejingxuanlistAll;
-        }
+        }*/
     }
 
     public static void getArticleNow() {
+        getArticleHotList(articleHotListAll, 1, 8);
+        Collections.sort(articleHotListAll);
+    }
+
+    /*public static void getArticleNow() {
         long now = System.currentTimeMillis()/1000;
         if (lastExecuteTime == null) {
             lastExecuteTime = now;
@@ -47,6 +56,38 @@ public class SmzdmHandler {
             }
         }
         //http://faxian.smzdm.com/json_more?filter=h3s0t0f0c0&page=2
+    }*/
+
+    public static void removeOldData(List<Article> alistAll) {
+        Calendar now = Calendar.getInstance();
+        int dayOfMonthNow = now.get(Calendar.DAY_OF_MONTH);
+        if(dayOfMonthNow != dayOfMonthForToday) {
+            dayOfMonthForToday = dayOfMonthNow;
+            //清除旧的数据
+            alistAll.clear();
+
+        }
+    }
+
+    public static void getArticleHotList(List<Article> alistAll, int page, int maxPage) {
+        //http://faxian.smzdm.com/9kuai9/json_more?filter=h2s0t0f0&page=3
+        if (page > maxPage) {
+            return;
+        }
+        if(page == 1) {
+            removeOldData(alistAll);
+        }
+        String result = HttpClientUtil.doGet("http://faxian.smzdm.com/9kuai9/json_more?filter=h2s0t0f0&page=" + page, "utf-8");
+        //System.out.println(result);
+        List<Article> alist = JsonUtils.Json2Bean(result, new TypeReference<List<Article>>() {
+        });
+        if(!Collections.disjoint(alistAll,alist)) {//有重复
+            alist.removeAll(alistAll);
+            alistAll.addAll(alist);
+            return;
+        }
+        alistAll.addAll(alist);
+        getArticleHotList(alistAll, page+1, maxPage);
     }
 
     public static void getArticlejingxuanList(List<Article> alistAll, long now, long timestamp) {
